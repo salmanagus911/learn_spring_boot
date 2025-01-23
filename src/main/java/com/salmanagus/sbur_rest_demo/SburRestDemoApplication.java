@@ -1,14 +1,18 @@
-package com.salmanagus.sbur_test_demo;
+package com.salmanagus.sbur_rest_demo;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+
+import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,6 +24,63 @@ public class SburRestDemoApplication {
 		SpringApplication.run(SburRestDemoApplication.class, args);
 	}
 
+}
+
+interface CoffeeRepository extends CrudRepository<Coffee, String> {}
+
+@Entity
+class Coffee {
+	@Id
+	private String id;
+	private String name;
+
+	public Coffee(String id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	public Coffee(String name) {
+		this(UUID.randomUUID().toString(), name);
+	}
+
+	public Coffee() {
+
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+}
+
+@Component
+class DataLoader {
+	private final CoffeeRepository coffeeRepository;
+
+	public DataLoader(CoffeeRepository coffeeRepository) {
+		this.coffeeRepository = coffeeRepository;
+	}
+
+	@PostConstruct
+	public void loadData() {
+		coffeeRepository.saveAll(List.of(
+				new Coffee("Cafe Cereza"),
+				new Coffee("Cafe Ganador"),
+				new Coffee("Cafe Lareno"),
+				new Coffee("Cafe Tres Pontas")
+		));
+	}
 }
 
 @RestController
@@ -68,39 +129,4 @@ class RestApiDemoController {
 	}
 }
 
-interface CoffeeRepository extends CrudRepository<Coffee, String> {}
 
-@Entity
-class Coffee {
-	@Id
-	private String id;
-	private String name;
-
-	public Coffee() {
-	}
-
-	public Coffee(String id, String name) {
-		this.id = id;
-		this.name = name;
-	}
-
-	public Coffee(String name) {
-		this(UUID.randomUUID().toString(), name);
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-}
