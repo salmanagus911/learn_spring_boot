@@ -1,0 +1,38 @@
+{
+  "groups": [
+    {
+      "name": "droid",
+      "type": "com.salmanagus.sbur_rest_demo.Droid",
+      "sourceType": "com.salmanagus.sbur_rest_demo.SburRestDemoApplication",
+      "sourceMethod": "createDroid()"
+    },
+    {
+      "name": "greeting",
+      "type": "com.salmanagus.sbur_rest_demo.Greeting",
+      "sourceType": "com.salmanagus.sbur_rest_demo.Greeting"
+    }
+  ],
+  "properties": [
+    {
+      "name": "droid.description",
+      "type": "java.lang.String",
+      "sourceType": "com.salmanagus.sbur_rest_demo.Droid"
+    },
+    {
+      "name": "droid.id",
+      "type": "java.lang.String",
+      "sourceType": "com.salmanagus.sbur_rest_demo.Droid"
+    },
+    {
+      "name": "greeting.coffee",
+      "type": "java.lang.String",
+      "sourceType": "com.salmanagus.sbur_rest_demo.Greeting"
+    },
+    {
+      "name": "greeting.name",
+      "type": "java.lang.String",
+      "sourceType": "com.salmanagus.sbur_rest_demo.Greeting"
+    }
+  ],
+  "hints": []
+}

@@ -1,8 +1,12 @@
 package com.salmanagus.sbur_rest_demo;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +22,18 @@ import java.util.Optional;
 import java.util.UUID;
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 public class SburRestDemoApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(SburRestDemoApplication.class, args);
+	}
+
+	@Bean
+	@ConfigurationProperties(prefix = "droid")
+	Droid createDroid() {
+		return new Droid();
 	}
 
 }
@@ -80,6 +92,99 @@ class DataLoader {
 				new Coffee("Cafe Lareno"),
 				new Coffee("Cafe Tres Pontas")
 		));
+	}
+}
+
+// using @Value
+//@RestController
+//@RequestMapping("/greeting")
+//class GreetingController {
+//	@Value("${greeting-name: Mirage}")
+//	private String name;
+//
+//	@Value("${greeting-coffee: ${greeting-name} is drinking Cafe Ganador}")
+//	private String coffee;
+//
+//	@GetMapping
+//	String getGreeting() {
+//		return name;
+//	}
+//
+//	@GetMapping("/coffee")
+//	String getCoffee() {
+//		return coffee;
+//	}
+//}
+
+
+@ConfigurationProperties(prefix = "greeting")
+class Greeting {
+	private String name, coffee;
+
+	public String getName() {
+		return name;
+	}
+
+	public String getCoffee() {
+		return coffee;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setCoffee(String coffee) {
+		this.coffee = coffee;
+	}
+}
+@RestController
+@RequestMapping("/greeting")
+class GreetingController {
+	private final Greeting greeting;
+	public GreetingController(Greeting greeting) {
+		this.greeting = greeting;
+	}
+
+	@GetMapping
+	String getGreeting() {
+		return greeting.getName();
+	}
+	@GetMapping("/coffee")
+	String getCoffee() {
+		return greeting.getCoffee();
+	}
+}
+
+class Droid {
+	private String id, description;
+
+	public String getId() {
+		return id;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+}
+
+@RestController
+@RequestMapping("/droid")
+class DroidController {
+	private final Droid droid;
+
+	public DroidController(Droid droid) {
+		this.droid = droid;
+	}
+
+	@GetMapping
+	Droid getDroid() {
+		return droid;
 	}
 }
 
